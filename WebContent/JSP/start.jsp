@@ -12,7 +12,7 @@
 	<%=request.getRequestURL()%>
 	<h4>requestURI:</h4>
 	<%=request.getRequestURI()%><p>
-		<%
+	<%-- 	<%
 			String url = null;
 			Method[] methods = request.getClass().getDeclaredMethods();
 			StringBuffer sb = new StringBuffer("#########################<br>");
@@ -46,7 +46,7 @@
 				}
 			}
 			out.println(sb.toString());
-		%>
+		%> --%>
 	
 </body>
 </html>
