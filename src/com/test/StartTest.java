@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bean.Ibean;
+import bean.JspInfoBean;
+import bean.UserBean;
+
+import controller.BeanHandler;
+
 /**
  * Servlet implementation class StartTest
  */
@@ -32,16 +38,19 @@ public class StartTest extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.setAttribute("remoteUserInfo", getRemoteInfo(request));
 		request.setAttribute("remoteIP", getRemortIP(request));
 		request.setAttribute("servInfo",
 				"request.getServletPath()= " + request.getServletPath());
-		// request.setAttribute("reqGetMethod", showAllMethod(request));
+		request.setAttribute("reqGetMethod", showAllMethod(request,true));
 		// request.setAttribute("respGetMethod", showAllMethod(response));
+		request.getSession().setAttribute("remoteUserInfo",
+				getRemoteInfo(request));
+		// request.getRequestDispatcher("/JSP/servStart.jsp").forward(request,
+		// response);
 
-		request.getRequestDispatcher("/JSP/servStart.jsp").forward(request,
-				response);
-		// response.sendRedirect("/JSP/servStart.jsp");
+		beanTest(request, response);
+		response.sendRedirect(request.getContextPath()+"/serv/bean");
+		// response.sendRedirect("JSP/servStart.jsp");
 		// PrintWriter out = response.getWriter();
 		// out.println(showAllMethod(request));
 		// out.println(showAllMethod(response));
@@ -121,5 +130,22 @@ public class StartTest extends HttpServlet {
 		result.append("Remote Address = " + req.getRemoteAddr());
 		result.append("<br>Remote User = " + req.getRemoteUser());
 		return result.toString();
+	}
+
+	private void beanTest(HttpServletRequest request,
+			HttpServletResponse response) {
+		String sessionId = request.getSession().getId();
+		Ibean bean = BeanHandler.getBean(sessionId, new JspInfoBean());
+		if (bean == null) {
+			JspInfoBean jBean = new JspInfoBean();
+			jBean.addServPath(request.getServletPath());
+			jBean.setSessionId(sessionId);
+			BeanHandler.addBean(sessionId, jBean);
+		} else {
+			JspInfoBean jBean = (JspInfoBean) bean;
+			jBean.addServPath(request.getServletPath());
+			jBean.setUser(new UserBean());
+		}
+
 	}
 }
