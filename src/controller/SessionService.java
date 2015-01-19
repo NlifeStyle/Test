@@ -7,8 +7,10 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cons.Constants;
+
 public class SessionService {
-	private final static String BEAN_KEY = "beanHandlerName";
+	
 
 	public static BeanHandler getBeanHandler(HttpServletRequest req) {
 		BeanHandler bh = (BeanHandler) req.getSession().getAttribute(
@@ -16,7 +18,7 @@ public class SessionService {
 		return bh;
 	}
 
-	private static String getBeanHanderName() {
+	public static String getBeanHanderName() {
 		Properties pro = new Properties();
 		try {
 			InputStream is = SessionService.class
@@ -29,7 +31,7 @@ public class SessionService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return pro.getProperty(BEAN_KEY);
+		return pro.getProperty(Constants.BEAN_KEY);
 	}
 
 	public static void main(String args[]) {

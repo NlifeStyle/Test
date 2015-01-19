@@ -146,7 +146,7 @@ public class StartTest extends HttpServlet {
 			JspInfoBean jBean = new JspInfoBean();
 			jBean.setSessionId("already exist" + count++);
 			jBean.addServPath(request.getServletPath());
-			bh.addBean(bean);
+			bh.addBean(jBean);
 		}
 
 	}
