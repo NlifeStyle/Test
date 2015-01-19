@@ -1,8 +1,6 @@
 package com.test;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +12,7 @@ import bean.JspInfoBean;
 import bean.UserBean;
 
 import controller.BeanHandler;
+import controller.SessionService;
 
 /**
  * Servlet implementation class BeanTest
@@ -42,13 +41,17 @@ public class BeanTest extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String sessionId = request.getSession().getId();
-		Ibean bean = BeanHandler.getBean(sessionId, new JspInfoBean());
+		BeanHandler bh = SessionService.getBeanHandler(request);
+
+		Ibean bean = bh.getBean(new JspInfoBean());
 		if (bean != null) {
 			bean.addServPath(request.getServletPath());
-			BeanHandler.addBean(sessionId, user);
-		} 
-		response.sendRedirect(request.getContextPath()+"/serv/start");
+			bh.addBean(user);
+		} else {
+			throw new ServletException(
+					"should not be null since it comes from startTest");
+		}
+		response.sendRedirect(request.getContextPath() + "/serv/start");
 	}
 
 	/**

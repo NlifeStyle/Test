@@ -1,7 +1,6 @@
 package com.test;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletException;
@@ -12,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import bean.Ibean;
 import bean.JspInfoBean;
-import bean.UserBean;
 
 import controller.BeanHandler;
+import controller.SessionService;
 
 /**
  * Servlet implementation class StartTest
@@ -22,6 +21,7 @@ import controller.BeanHandler;
 @WebServlet("/StartTest")
 public class StartTest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private int count = 0;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -41,7 +41,7 @@ public class StartTest extends HttpServlet {
 		request.setAttribute("remoteIP", getRemortIP(request));
 		request.setAttribute("servInfo",
 				"request.getServletPath()= " + request.getServletPath());
-		request.setAttribute("reqGetMethod", showAllMethod(request, true));
+		request.setAttribute("reqGetMethod", showAllMethod(request));
 		// request.setAttribute("respGetMethod", showAllMethod(response));
 		request.getSession().setAttribute("remoteUserInfo",
 				getRemoteInfo(request));
@@ -67,7 +67,7 @@ public class StartTest extends HttpServlet {
 	}
 
 	private String showAllMethod(Object obj) {
-		return showAllMethod(obj, false);
+		return showAllMethod(obj, true);
 	}
 
 	private String showAllMethod(Object obj, boolean isDebug) {
@@ -135,16 +135,18 @@ public class StartTest extends HttpServlet {
 	private void beanTest(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		Ibean bean = BeanHandler.getBean(sessionId, new JspInfoBean());
+		BeanHandler bh = SessionService.getBeanHandler(request);
+		Ibean bean = bh.getBean(new JspInfoBean());
 		if (bean == null) {
 			JspInfoBean jBean = new JspInfoBean();
 			jBean.addServPath(request.getServletPath());
-			jBean.setSessionId(sessionId);
-			BeanHandler.addBean(sessionId, jBean);
+			jBean.setSessionId("" + count++);
+			bh.addBean(jBean);
 		} else {
-			JspInfoBean jBean = (JspInfoBean) bean;
+			JspInfoBean jBean = new JspInfoBean();
+			jBean.setSessionId("already exist" + count++);
 			jBean.addServPath(request.getServletPath());
-			jBean.setUser(new UserBean());
+			bh.addBean(bean);
 		}
 
 	}
