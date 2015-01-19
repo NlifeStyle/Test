@@ -41,7 +41,7 @@ public class StartTest extends HttpServlet {
 		request.setAttribute("remoteIP", getRemortIP(request));
 		request.setAttribute("servInfo",
 				"request.getServletPath()= " + request.getServletPath());
-		request.setAttribute("reqGetMethod", showAllMethod(request,true));
+		request.setAttribute("reqGetMethod", showAllMethod(request, true));
 		// request.setAttribute("respGetMethod", showAllMethod(response));
 		request.getSession().setAttribute("remoteUserInfo",
 				getRemoteInfo(request));
@@ -49,7 +49,7 @@ public class StartTest extends HttpServlet {
 		// response);
 
 		beanTest(request, response);
-		response.sendRedirect(request.getContextPath()+"/serv/bean");
+		response.sendRedirect(request.getContextPath() + "/serv/bean");
 		// response.sendRedirect("JSP/servStart.jsp");
 		// PrintWriter out = response.getWriter();
 		// out.println(showAllMethod(request));
@@ -134,7 +134,7 @@ public class StartTest extends HttpServlet {
 
 	private void beanTest(HttpServletRequest request,
 			HttpServletResponse response) {
-		String sessionId = request.getSession().getId();
+
 		Ibean bean = BeanHandler.getBean(sessionId, new JspInfoBean());
 		if (bean == null) {
 			JspInfoBean jBean = new JspInfoBean();
