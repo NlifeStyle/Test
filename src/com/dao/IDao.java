@@ -1,15 +1,13 @@
 package com.dao;
 
-import java.util.List;
+public interface IDao<O> {
 
-public interface IDao<O extends String> {
+	void save(O o);
 
-	boolean save(O o);
+	Object search(O o);
 
-	List<List<String>> search(O o);
+	void delete(O o);
 
-	boolean delete(O o);
-
-	boolean update(O o);
+	void update(O o);
 
 }
